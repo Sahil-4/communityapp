@@ -1,0 +1,13 @@
+{
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "filepath": "always",
+  "jsxSingleQuote": false,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true
+}

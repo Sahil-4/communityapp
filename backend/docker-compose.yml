@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: community_app_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: community_app
+    ports:
+      - '5432:5432'
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - community_app_network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: community_app_mongodb
+    environment:
+      # MONGO_INITDB_ROOT_USERNAME: user
+      # MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: community_app
+    ports:
+      - '27017:27017'
+    expose:
+      - 27017
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - community_app_network
+
+  redis:
+    image: redis:8.0-M02-alpine
+    container_name: community_app_redis
+    ports:
+      - '6379:6379'
+    expose:
+      - 6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - community_app_network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
+
+networks:
+  community_app_network:
+    driver: bridge
