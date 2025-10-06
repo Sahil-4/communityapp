@@ -4,7 +4,9 @@ import { AppModule } from "./app.module";
 import appConfig from "./config/config";
 
 (async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
   // Swagger config
   const config = new DocumentBuilder()
     .setTitle(appConfig.app.name)
@@ -14,6 +16,7 @@ import appConfig from "./config/config";
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api/v1/docs", app, document);
+  app.enableCors(appConfig.cors.options);
 
   await app.listen(appConfig.app.port);
 })();
