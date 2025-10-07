@@ -11,6 +11,12 @@ interface User {
   updatedAt: DateTime;
 }
 
+type AuthT = User & {
+  password: null;
+  refreshToken: string;
+  accessToken: string;
+};
+
 type SignupPayload = pick<User, "username" | "name", "phone" | "password">;
 
 type LoginPayload = pick<User, "phone" | "password">;
