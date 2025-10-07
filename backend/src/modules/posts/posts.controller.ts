@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from "@nestjs/common";
@@ -65,7 +66,7 @@ export class PostsController {
     status: 200,
     description: "Post updated successfully",
   })
-  @Post("/:id")
+  @Patch("/:id")
   async updatePost(@Param("id") id: string, @Body() payload: PostUpdateDTO) {
     const data = await this.postsService.updatePost(id, payload);
     return { message: `Post with id ${id} updated`, data };
