@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH1 } from "@/components/ui/typography";
+import { useMutation } from "@tanstack/react-query";
+import { signup } from "@/api";
 
 interface IFormInput {
   username: string;
@@ -19,14 +21,24 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isValid },
+    formState: { errors, isValid, isLoading },
   } = useForm<IFormInput>();
 
   const router = useRouter();
 
+  const { error, isPending, mutate } = useMutation({
+    mutationFn: signup,
+    mutationKey: ["auth"],
+    onSuccess: (data: unknown) => {
+      localStorage.setItem("auth", JSON.stringify(data));
+      router.push("/");
+    },
+  });
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(isValid);
     console.log(data);
+    mutate(data);
   };
 
   const navigateToLogin = () => {
@@ -60,9 +72,7 @@ const Page = () => {
     },
   ] as const;
 
-  console.log(errors);
-
-  if (isLoading) return <Spinner />;
+  if (isLoading || isPending) return <Spinner />;
   return (
     <main className="w-full scroll-auto">
       <form

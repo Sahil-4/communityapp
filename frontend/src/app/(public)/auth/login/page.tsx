@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH1 } from "@/components/ui/typography";
+import { login } from "@/api";
+import { useMutation } from "@tanstack/react-query";
 
 interface IFormInput {
   phone: string;
@@ -22,8 +24,18 @@ const Page = () => {
 
   const router = useRouter();
 
+  const { error, isPending, mutate } = useMutation({
+    mutationFn: login,
+    mutationKey: ["auth"],
+    onSuccess: (data: unknown) => {
+      localStorage.setItem("auth", JSON.stringify(data));
+      router.push("/");
+    },
+  });
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
+    mutate(data);
   };
 
   const navigateToSignup = () => {
@@ -47,7 +59,7 @@ const Page = () => {
 
   console.log(errors);
 
-  if (isLoading) return <Spinner />;
+  if (isLoading || isPending) return <Spinner />;
   return (
     <main className="w-full scroll-auto">
       <form
